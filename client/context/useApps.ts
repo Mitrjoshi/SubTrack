@@ -1,43 +1,57 @@
 import { create } from "zustand";
 
+interface Plan {
+  amount?: number; // Optional
+  currency: string; // Required
+  interval?: string; // Optional
+  paymentFrequency?: "monthly" | "yearly"; // Optional
+  renewalDate?: string; // Optional
+}
+
 interface App {
   name: string;
   image_url: string;
+  availablePlans?: Plan[]; // Derived from the JSON's `plans` array
+  plan?: Plan; // Selected plan for the app
+  renewalDate?: string; // Renewal date for the app
 }
 
 interface I_UseApps {
-  apps: App[] | null;
-  updateApp: (val: App) => void;
-  resetApps: () => void;
+  apps: App[]; // Selected apps array
+  toggleApp: (app: App) => void; // Add or remove app
+  updateAppPlan: (name: string, plan: Plan) => void; // Update app's plan
+  updateRenewalDate: (name: string, renewalDate: string) => void; // Update renewal date for an app
+  resetApps: () => void; // Clear all selected apps
 }
 
 export const useApps = create<I_UseApps>((set) => ({
-  apps: null,
-  resetApps: () => {
-    set({
-      apps: null,
-    });
-  },
-  updateApp: (val) =>
+  apps: [],
+  toggleApp: (app) =>
     set((state) => {
-      if (state.apps) {
-        const appExists = state.apps.some((app) => app.name === val.name); // Check if the app already exists
-        if (appExists) {
-          // Remove app if it exists
-          return {
-            apps: state.apps.filter((app) => app.name !== val.name),
-          };
-        } else {
-          // Add app if it doesn't exist
-          return {
-            apps: [...state.apps, val],
-          };
-        }
+      const appExists = state.apps.some((a) => a.name === app.name);
+      if (appExists) {
+        // Remove the app if it already exists
+        return { apps: state.apps.filter((a) => a.name !== app.name) };
       } else {
-        // If no apps exist, initialize the list with the new app
+        // Add the app with its available plans if provided
         return {
-          apps: [val],
+          apps: [...state.apps, { ...app, plan: app.plan ?? undefined }],
         };
       }
     }),
+  updateAppPlan: (name, plan) =>
+    set((state) => ({
+      apps: state.apps.map((app) =>
+        app.name === name
+          ? { ...app, plan, renewalDate: plan.renewalDate }
+          : app
+      ),
+    })),
+  updateRenewalDate: (name, renewalDate) =>
+    set((state) => ({
+      apps: state.apps.map((app) =>
+        app.name === name ? { ...app, renewalDate } : app
+      ),
+    })),
+  resetApps: () => set({ apps: [] }),
 }));

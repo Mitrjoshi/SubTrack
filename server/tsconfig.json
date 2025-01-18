@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "rootDir": "./",
-    "resolveJsonModule": true /* in case you are importing JSON files */,
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
-    "noImplicitAny": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "sourceMap": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

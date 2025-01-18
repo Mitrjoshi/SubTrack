@@ -42,10 +42,17 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
-          name="manage"
+          name="select-apps"
           options={{
             headerShown: true,
             title: "Choose your Apps",
+          }}
+        />
+        <Stack.Screen
+          name="select-plan"
+          options={{
+            headerShown: true,
+            title: "Choose your Plan",
           }}
         />
         <Stack.Screen name="home" options={{ headerShown: false }} />

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   default: {
     lineHeight: 24,
     padding: 10,
-    borderRadius: 90,
+    borderRadius: 10,
     borderWidth: 1,
   },
 });
